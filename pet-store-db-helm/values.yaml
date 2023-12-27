@@ -59,17 +59,15 @@ tolerations: []
 
 affinity: {}
 
-global:
-  postgresql:
-    image:
+postgresql:
+  architecture: "replication"
+  image:
       debug: false
-    metrics:
-      enabled: false
-    auth:
-      postgresPassword: "pass"
-      username: "pet_store"
-      password: "pass"
-      database: "pet_store_db"
-    audit:
-      logHostname: true
-      logConnections: true
+  metrics:
+    enabled: true
+  auth:
+    postgresPassword: "pass"
+    username: "pet_store"
+    password: "pass"
+    database: "pet_store_db"
+    
