@@ -66,8 +66,5 @@ postgresql:
   metrics:
     enabled: true
   auth:
-    postgresPassword: "pass"
     username: "pet_store"
-    password: "pass"
     database: "pet_store_db"
-    

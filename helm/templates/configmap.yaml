@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.serviceAccount.name }}-configmap
+data:
+    FLYWAY_URL: "jdbc:postgresql://pet-store-db-postgresql-primary:5432/pet_store_db?loglevel=2"
+    FLYWAY_USER: "pet_store"
+    FLYWAY_LOCATIONS: "filesystem:/flyway/sql"
+    driver-class-name: "org.postgresql.Driver"

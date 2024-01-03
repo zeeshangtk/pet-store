@@ -54,6 +54,21 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      initContainers:
+      - name:  {{ .Chart.Name }}-migration
+        image: ansarizeeshanali/pet-store-db-migration
+        env:
+          - name: FLYWAY_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "pet-store-db-postgresql"
+                key: "password"
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.serviceAccount.name }}-configmap
+        command: ["flyway", "migrate", "-X"]
+      restartPolicy: Always
+
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
