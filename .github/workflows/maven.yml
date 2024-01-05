@@ -15,8 +15,7 @@ on:
     branches: [ "main","fix-pipeline" ]
 
 jobs:
-  build:
-
+  setup-postgres:
     runs-on: ubuntu-latest
     services:
       # Label used to access the service container
@@ -34,6 +33,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
