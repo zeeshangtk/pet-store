@@ -32,7 +32,7 @@ jobs:
         run: docker build . --file Dockerfile --tag pet-store-backend:$(date +%s)
         env:
           # The hostname used to communicate with the PostgreSQL service container
-          DB_URL: "jdbc:postgresql://localhost:5432/petstore"
+          DB_URL: "jdbc:postgresql://postgres:5432/petstore"
           # The default PostgreSQL port
           DB_USER_NAME: "postgres"
           DB_PASSWORD: "postgres"
