@@ -41,8 +41,7 @@ jobs:
           context: .
           push: false
           tags: user/pet-store-backend:latest
-          build-args: |
-            DB_URL="jdbc:postgresql://postgres:5432/petstore"
-            DB_USER_NAME= "postgres"
-            DB_PASSWORD= "postgres" 
+          DB_URL: "jdbc:postgresql://postgres:5432/petstore"
+          DB_USER_NAME:  "postgres"
+          DB_PASSWORD:  "postgres" 
         
