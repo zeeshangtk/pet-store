@@ -9,8 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      registry:
-        image: 889772146711.dkr.ecr.ap-south-1.amazonaws.com/zeeshan-pet-store
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -34,6 +32,20 @@ jobs:
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       -
+        name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1200
+          role-session-name: DockerPushSession
+      -
+        name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
@@ -41,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          push: false
           tags: pet-store-backend:latest
           secrets: |
             "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}"
