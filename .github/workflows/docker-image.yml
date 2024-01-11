@@ -1,0 +1,48 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [ "main" , "build-docker-image"]
+  pull_request:
+    branches: [ "main", "build-docker-image" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: petstore
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: user/pet-store-backend:latest
+          build-args: |
+            DB_URL=jdbc:postgresql://172.17.0.1:5432/petstore
+            DB_USER_NAME=postgres
+            DB_PASSWORD=postgres 
+        
