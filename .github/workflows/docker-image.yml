@@ -1,14 +1,16 @@
 name: Docker Image CI
 on:
   push:
-    branches: [ "main" , "build-docker-image"]
+    branches: [ "main" , "push-docker-image"]
   pull_request:
-    branches: [ "main", "build-docker-image" ]
+    branches: [ "main", "push-docker-image" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
+      registry:
+        image: 889772146711.dkr.ecr.ap-south-1.amazonaws.com/zeeshan-pet-store
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -39,8 +41,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
-          tags: user/pet-store-backend:latest
+          push: true
+          tags: pet-store-backend:latest
+          secrets: |
+            "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}"
+            "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
           build-args: |
             DB_URL=jdbc:postgresql://172.17.0.1:5432/petstore
             DB_USER_NAME=postgres
